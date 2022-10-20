@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -14,8 +15,13 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
+
+   private final SessionFactory sessionFactory;
+
    @Autowired
-   private SessionFactory sessionFactory;
+   public UserDaoImp(SessionFactory sessionFactory) {
+      this.sessionFactory = sessionFactory;
+   }
 
    @Override
    public void add(User user) {
@@ -27,24 +33,27 @@ public class UserDaoImp implements UserDao {
       sessionFactory.getCurrentSession().save(car);
    }
 
+   @Transactional
    @Override
    public List<Car> listCars() {
-      TypedQuery<Car> query = sessionFactory.getCurrentSession().createQuery("from Car");
+      TypedQuery<Car> query = sessionFactory.getCurrentSession().createQuery("FROM Car", Car.class);
       return query.getResultList();
    }
 
+   @Transactional
    @Override
    public List<User> listUsers() {
-      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("FROM User", User.class);
       return query.getResultList();
    }
 
+   @Transactional
    @Override
    public User getUserByCarDao (String model, int series) {
-      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("FROM User as user WHERE " +
-              "user.empCar.model =:model AND user.empCar.series =:series");
+      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("FROM User AS user WHERE " +
+              "user.empCar.model =:model AND user.empCar.series =:series", User.class);
       query.setParameter("model", model).setParameter("series", series);
-      return query.setMaxResults(1).getSingleResult();
+      return query.getSingleResult();
    }
 
 }

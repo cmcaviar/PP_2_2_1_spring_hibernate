@@ -26,6 +26,7 @@ public class User {
    @OneToOne(cascade = CascadeType.ALL)
    @JoinColumn(name = "car_id")
    private Car empCar;
+
    @Autowired
    public User() {}
    
@@ -79,12 +80,11 @@ public class User {
 
    @Override
    public String toString() {
-      return "User{" +
-              "id=" + id +
-              ", firstName='" + firstName + '\'' +
-              ", lastName='" + lastName + '\'' +
-              ", email='" + email + '\'' +
-              ", car=" + empCar +
-              '}';
+      return "User " +
+              "Id = " + getId() + "\n" +
+              "First Name = " + getFirstName() + "\n" +
+              "Last Name = " + getLastName() + "\n" +
+              "E-mail = " + getEmail() + "\n" +
+              "Car = " + getEmpCar();
    }
 }

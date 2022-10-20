@@ -31,7 +31,7 @@ public class MainApp {
 
       List<User> users = userService.listUsers();
       for (User user : users) {
-         System.out.println(user.toString());
+         System.out.println(user);
          System.out.println();
       }
       System.out.println(userService.getUserByCar("h2", 2));
